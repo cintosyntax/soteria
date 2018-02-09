@@ -1,0 +1,4 @@
+package: github.com/cintosyntax/soteria
+import:
+  - package: 'github.com/smartystreets/goconvey'
+  - package: 'github.com/smartystreets/assertions'

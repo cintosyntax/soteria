@@ -1,4 +1,4 @@
-package soteria
+package main
 
 import (
 	"testing"

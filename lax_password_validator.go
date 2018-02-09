@@ -1,4 +1,4 @@
-package soteria
+package main
 
 // LaxPasswordValidator describes a validator that accepts ANY password. Warning
 // never use this in production!

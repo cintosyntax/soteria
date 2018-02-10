@@ -13,11 +13,29 @@ func TestExtractPasswordsFromIO(t *testing.T) {
 
 		Convey("it returns a no password given error", func() {
 			So(err, ShouldNotBeNil)
-			So(err.Error(), ShouldEqual, "No passwords to validate given")
+			So(err.Error(), ShouldEqual, "no passwords to validate given")
 		})
 
 		Convey("it returns no passwords", func() {
 			So(pws, ShouldBeEmpty)
+		})
+	})
+}
+
+func TestLoadPasswordValidator(t *testing.T) {
+	Convey("when no validator is specified", t, func() {
+		_, err := LoadPasswordValidator("")
+		Convey("it should return an error", func() {
+			So(err, ShouldNotBeNil)
+			So(err.Error(), ShouldEqual, "validator must be specified")
+		})
+	})
+
+	Convey("when a unknown validator is specified", t, func() {
+		_, err := LoadPasswordValidator("spythisvalidator")
+		Convey("it should return an error", func() {
+			So(err, ShouldNotBeNil)
+			So(err.Error(), ShouldEqual, "unknown validator specified")
 		})
 	})
 }

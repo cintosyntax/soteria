@@ -1,4 +1,4 @@
-package main
+package validators
 
 import (
 	. "github.com/smartystreets/goconvey/convey"

@@ -1,4 +1,4 @@
-package main
+package models
 
 // Password defines a valid data structure that encapsulates a password string and
 // and its validity
@@ -7,12 +7,7 @@ type Password struct {
 	errors []string
 }
 
-// PasswordValidator defines the public interface that describes a valid struct
-// that is capable of validating passwords.
-type PasswordValidator interface {
-	Validate(string) (bool []string)
-}
-
+// BuildPassword returns a Password struct with its value as the string provided
 func BuildPassword(pw string) *Password {
 	return &Password{
 		String: pw,
@@ -20,6 +15,7 @@ func BuildPassword(pw string) *Password {
 	}
 }
 
+// GetErrors returns the private collection of errors.
 func (p *Password) GetErrors() []string {
 	return p.errors
 }

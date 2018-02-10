@@ -24,8 +24,8 @@ func TestPassword(t *testing.T) {
 	Convey("Valid", t, func() {
 		Convey("with errors it should be false", func() {
 			pw := &Password{
-				String: "goat",
-				errors: []string{"bad characters", "bad things"},
+				String:        "goat",
+				errorMessages: []string{"bad characters", "bad things"},
 			}
 			So(pw.Valid(), ShouldBeFalse)
 		})

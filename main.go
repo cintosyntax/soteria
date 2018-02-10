@@ -3,33 +3,76 @@ package main
 import (
 	"errors"
 	"flag"
+	"fmt"
 	"github.com/cintosyntax/soteria/pkg/models"
 	"github.com/cintosyntax/soteria/pkg/validators"
 	"io/ioutil"
 	"os"
+	"regexp"
 	"strings"
 )
 
 func main() {
-	// Parse Arguments
-	// Defines flags
-	flag.String("validator", "", "defines which validator to use")
+	validatorPtr := flag.String("validator", "", "defines which validator to use")
+	commonPasswordFilePtr := flag.String("cpf", "", "defines a file that contains weak passwords")
 	flag.Parse()
 
-	// LoadPasswordValidator
-
-	_, err := ExtractPasswordsFromIO()
-	if err != nil {
-		// Panic if there was something wrong with the passwords provided in IO.
-		panic(err)
+	passwordValidator, pvLoadErr := LoadPasswordValidator(*validatorPtr)
+	if pvLoadErr != nil {
+		panic(pvLoadErr)
 	}
 
-	// Read the CommonPasswords in the 2nd parameters
-	// Build the NistPasswordValidator
+	commonPasswords, cpLoadErr := LoadCommonPasswordsFile(*commonPasswordFilePtr)
+	if cpLoadErr != nil {
+		panic(cpLoadErr)
+	}
+
+	passwordValidator.AddToCommonBlackList(commonPasswords)
+
+	passwords, pwExtractErr := ExtractPasswordsFromIO()
+	if pwExtractErr != nil {
+		panic(pwExtractErr)
+	}
+
+	for _, pw := range passwords {
+		pw.Validate(passwordValidator)
+		if pw.Valid() == false {
+			pwInvalidErrMsg := buildErrorDisplayMessage(pw)
+			fmt.Println(pwInvalidErrMsg)
+		}
+	}
 
 }
 
 // Application specific functions ---
+
+func buildErrorDisplayMessage(pw *models.Password) string {
+	errorString := strings.Join(pw.GetErrorMessages(), ", ")
+
+	formattedPassword := replaceIllegalCharacters(pw.String, "*")
+
+	return fmt.Sprintf("%s: %s", formattedPassword, errorString)
+}
+
+func replaceIllegalCharacters(str string, rs string) string {
+	var re = regexp.MustCompile(`([^\x00-\x7F])`)
+	s := re.ReplaceAllString(str, rs)
+	return s
+}
+func LoadCommonPasswordsFile(fileName string) ([]string, error) {
+	if fileName == "" {
+		return nil, errors.New("no common password list file provided")
+	}
+
+	fileData, readErr := ioutil.ReadFile(fileName)
+	if readErr != nil {
+		return nil, readErr
+	}
+
+	passwordsString := string(fileData)
+	passwords := strings.Split(passwordsString, "\n")
+	return passwords, nil
+}
 
 func LoadPasswordValidator(pvName string) (validators.PasswordValidator, error) {
 	if pvName == "" {
@@ -51,7 +94,6 @@ func LoadPasswordValidator(pvName string) (validators.PasswordValidator, error) 
 func ExtractPasswordsFromIO() ([]*models.Password, error) {
 	stdinFileInfo, err := os.Stdin.Stat()
 	if err != nil {
-		// Add Test coverage here
 		return nil, err
 	}
 
@@ -61,11 +103,17 @@ func ExtractPasswordsFromIO() ([]*models.Password, error) {
 
 	stdinContent, readErr := ioutil.ReadAll(os.Stdin)
 	if readErr != nil {
-		// Add Test Coverage here
 		return nil, readErr
 	}
 
-	passwordLines := strings.Split(string(stdinContent), "\n")
+	rawLines := strings.Split(string(stdinContent), "\n")
+	passwordLines := []string{}
+	for _, pw := range rawLines {
+		if pw != "" {
+			passwordLines = append(passwordLines, pw)
+		}
+	}
+
 	pws := make([]*models.Password, len(passwordLines))
 	for i, pw := range passwordLines {
 		pws[i] = models.BuildPassword(pw)

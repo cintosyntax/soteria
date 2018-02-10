@@ -39,3 +39,22 @@ func TestLoadPasswordValidator(t *testing.T) {
 		})
 	})
 }
+
+func TestLoadCommonPasswordsFile(t *testing.T) {
+	Convey("when no file is specified", t, func() {
+		_, err := LoadCommonPasswordsFile("")
+
+		Convey("it should return an error", func() {
+			So(err, ShouldNotBeNil)
+			So(err.Error(), ShouldEqual, "no common password list file provided")
+		})
+	})
+
+	Convey("when a invalid file is specified", t, func() {
+		_, err := LoadCommonPasswordsFile("no path here!")
+		Convey("it should return an error", func() {
+			So(err, ShouldNotBeNil)
+			So(err.Error(), ShouldEqual, "open no path here!: no such file or directory")
+		})
+	})
+}

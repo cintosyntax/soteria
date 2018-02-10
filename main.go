@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	validatorPtr := flag.String("validator", "", "defines which validator to use")
+	validatorPtr := flag.String("validator", "nist", "defines which validator to use")
 	commonPasswordFilePtr := flag.String("cpf", "", "defines a file that contains weak passwords")
 	flag.Parse()
 
@@ -61,7 +61,7 @@ func replaceIllegalCharacters(str string, rs string) string {
 }
 func LoadCommonPasswordsFile(fileName string) ([]string, error) {
 	if fileName == "" {
-		return nil, errors.New("no common password list file provided")
+		return []string{}, nil
 	}
 
 	fileData, readErr := ioutil.ReadFile(fileName)

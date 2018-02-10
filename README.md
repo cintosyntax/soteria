@@ -14,4 +14,21 @@ If you haven't already installed Go, follow the steps [here](https://golang.org/
 ```bash
 cd $GOPATH/src/
 git clone https://github.com/cintosyntax/soteria.git
+go build
 ```
+
+# Usage
+
+Basic usage. You must pipe the a newline delimited document of passwords.
+```bash
+cat password_list.txt | ./soteria -validator=nist -cfp=weak_password_list.txt
+
+# *_*: Too short (8 character minimum), Contains illegal characters
+# l*ng: Too short (8 character minimum), Contains illegal characters
+# password: Too common
+```
+
+### Options
+
+- validator - this flag option can change the validator to use. By default this is "nist". Another option is "lax", which uses a validator that accepts everything.
+- cfp - this flag defines the directory to a common password list that can be used by the selected validator to ignore them. By default this is not set.

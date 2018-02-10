@@ -42,11 +42,13 @@ func TestLoadPasswordValidator(t *testing.T) {
 
 func TestLoadCommonPasswordsFile(t *testing.T) {
 	Convey("when no file is specified", t, func() {
-		_, err := LoadCommonPasswordsFile("")
+		commonPasswords, err := LoadCommonPasswordsFile("")
 
-		Convey("it should return an error", func() {
-			So(err, ShouldNotBeNil)
-			So(err.Error(), ShouldEqual, "no common password list file provided")
+		Convey("it should return no error", func() {
+			So(err, ShouldBeNil)
+		})
+		Convey("it should return a empty slice of strings", func() {
+			So(commonPasswords, ShouldBeEmpty)
 		})
 	})
 

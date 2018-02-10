@@ -21,21 +21,25 @@ func BuildNistPasswordValidator() *NistPasswordValidator {
 // the record is invalid it will return a slice of strings that indicate the
 // reason.
 //
-// TODO - use go functions to add performance boost
 func (nsv *NistPasswordValidator) Validate(pw string) (bool, []string) {
+	errorMessages := []string{}
 	if valid, errMsg := nsv.validateLength(pw); valid == false {
-		return false, []string{errMsg}
+		errorMessages = append(errorMessages, errMsg)
 	}
 
 	if valid, errMsg := nsv.validateNotCommon(pw); valid == false {
-		return false, []string{errMsg}
+		errorMessages = append(errorMessages, errMsg)
 	}
 
 	if valid, errMsg := nsv.validateASCII(pw); valid == false {
-		return false, []string{errMsg}
+		errorMessages = append(errorMessages, errMsg)
 	}
 
-	return true, []string{}
+	if len(errorMessages) > 0 {
+		return false, errorMessages
+	} else {
+		return true, []string{}
+	}
 }
 
 // AddToCommonBlackList stores records of blacklisted passwords that are common.

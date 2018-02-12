@@ -30,3 +30,11 @@ cat password_list.txt | ./soteria -validator=nist -cfp=weak_password_list.txt
 #### Options
 - validator - this flag option can change the validator to use. By default this is "nist". Another option is "lax", which uses a validator that accepts everything.
 - cfp - this flag defines the directory to a common password list that can be used by the selected validator to ignore them. By default this is not set.
+
+# Contributing (Optional)
+
+This project uses glide as a package manager which handles installation of development dependencies such as goconvey (the testing library).
+
+- Follow these steps to install glide [here](https://github.com/Masterminds/glide)
+- In the project root directory run `glide install`
+- After the dependencies have installed, you can run the tests with `go test`

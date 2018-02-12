@@ -18,7 +18,7 @@ go build
 
 Basic usage. You must pipe the a newline delimited document of passwords.
 ```bash
-cat password_list.txt | ./soteria -validator=nist -cfp=weak_password_list.txt
+cat password_list.txt | ./soteria -validator=nist -cpf=weak_password_list.txt
 
 # *_*: Too short (8 character minimum), Contains illegal characters
 # tinyelephantmusic: OK
@@ -29,7 +29,7 @@ cat password_list.txt | ./soteria -validator=nist -cfp=weak_password_list.txt
 
 #### Options
 - validator - this flag option can change the validator to use. By default this is "nist". Another option is "lax", which uses a validator that accepts everything.
-- cfp - this flag defines the directory to a common password list that can be used by the selected validator to ignore them. By default this is not set.
+- cpf - this flag defines the directory to a common password list that can be used by the selected validator to ignore them. By default this is not set.
 
 # Contributing (Optional)
 

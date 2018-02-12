@@ -39,6 +39,8 @@ func main() {
 		if pw.Valid() == false {
 			pwInvalidErrMsg := buildErrorDisplayMessage(pw)
 			fmt.Println(pwInvalidErrMsg)
+		} else {
+			fmt.Printf("%s: OK\n", pw.String)
 		}
 	}
 

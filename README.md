@@ -1,5 +1,4 @@
-# Soteria
-[![Build Status](https://travis-ci.org/edwinthinks/soteria.svg?branch=master)](https://travis-ci.org/edwinthinks/soteria)
+# Soteria [![Build Status](https://travis-ci.org/edwinthinks/soteria.svg?branch=master)](https://travis-ci.org/edwinthinks/soteria)
 
 A Golang password validation utility (named after the Greek goddess of safety) used to validate a list of passwords against the [NIST](https://www.nist.gov/) password standards. 
 
